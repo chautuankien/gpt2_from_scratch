@@ -1,18 +1,21 @@
+import torch
 import torch.nn as nn
+from torch.nn import functional as F
+import math
 from config.config import GPTConfig
 
 class CausalSelfAttention(nn.Module):
     def __init__(self, config: GPTConfig):
         super().__init__()
 
-        assert config.n_embd % config.n_head == 0
+        assert config.N_EMBED % config.N_HEAD == 0
         # key, query, value projections for all heads, but in a batch
-        self.c_attn = nn.Linear(config.n_embd, 3 * config.n_embd)
+        self.c_attn = nn.Linear(config.N_EMBED, 3 * config.N_EMBED)
         # output projection
-        self.c_proj = nn.Linear(config.n_embd, config.n_embd)
+        self.c_proj = nn.Linear(config.N_EMBED, config.N_EMBED)
         
-        self.n_head = config.n_head  # -> n_head attention
-        self.n_embd = config.n_embd
+        self.n_head = config.N_HEAD  # -> n_head attention
+        self.n_embd = config.N_EMBED
          
     def forward(self, x):
         B, T, C = x.size() # B: batch size, T: sequence length, C: embedding dimension
