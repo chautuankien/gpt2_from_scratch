@@ -55,3 +55,8 @@ def process_dataset(dataset, output_file, tokenizer_name="gpt2"):
         print(f"Total tokens: {start_index}")
         print(f"Output saved to: {output_file}")
 
+if __name__ == "__main__":
+    from config.config import GPTConfig
+    val_dataset = dataset_loader("EleutherAI/wikitext_document_level",
+                                 "wikitext-2-raw-v1", split="train")
+    process_dataset(val_dataset, GPTConfig.TRAIN_PATH)

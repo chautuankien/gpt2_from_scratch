@@ -157,14 +157,19 @@ try:
         # Update model parameters
         optimizer.step()
 
+        # Evaluate the loss on train/val sets
+        if step % GPTConfig.EVAL_STEPS == 0:
+            est_loss = estimate_loss(GPTConfig.EVAL_INTERVAL)
+            print(f"Step: {step}, Train loss: {est_loss['train']:.4f}, Dev loss: {est_loss['val']:.4f}")
+
+
         # Timing and Logging
         t1 = time.time()
         dt = (t1 - t0) * 1000
-        if step % GPTConfig.EVAL_STEPS == 0:
+        if step % GPTConfig.LOG_STEPS == 0:
             # print(f"Step: {step}, loss: {loss.item()}")
-            print(f"Step: {step}, Loss: {loss_accum:.6f}, Lr: {lr:.4e} Norm: {norm:.4f}, Time: {dt:.2} ms")
-            est_loss = estimate_loss(GPTConfig.EVAL_INTERVAL)
-            print(f"Step: {step}, Train loss: {est_loss['train']:.4f}, Dev loss: {est_loss['val']:.4f}")
+            print(f"Iter: {step}, Loss: {loss_accum:.6f}, Lr: {lr:.4e} Norm: {norm:.4f}, Time: {dt:.2} ms")
+            
 
         
 finally:
